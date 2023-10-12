@@ -9,7 +9,7 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-latest
     steps:
-      - uses: ekbrothers/tfc-api-driven-reusable-workflow@v1.0
+      - uses: ekbrothers/tfc-api-driven-reusable-workflow@v0.0.1
         with:
           TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
           TF_API_TOKEN: ${{ secrets.TESTING_TOKEN }}
