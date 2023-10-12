@@ -8,7 +8,7 @@ on:
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
-    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow@dbd6baf1e33e15e9d072cb66c21011dc1df2ceec
+    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@dbd6baf1e33e15e9d072cb66c21011dc1df2ceec
     with:
       TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
       TF_API_TOKEN: ${{ secrets.TESTING_TOKEN }}
