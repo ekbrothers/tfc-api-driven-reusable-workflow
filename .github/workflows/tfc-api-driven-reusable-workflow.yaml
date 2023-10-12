@@ -4,6 +4,10 @@ description: "Automate Terraform plan operations and provide feedback on pull re
 on:
   workflow_call:
     inputs:
+      # ENV:
+      #   required: true
+      #   type: string
+      #   description: Github Environment targeted for deployment.
       TF_CLOUD_ORGANIZATION:
         description: "Terraform Cloud Organization Name"
         required: true
@@ -21,6 +25,9 @@ on:
         required: true
         type: string
         default: "./"
+    secrets:
+      TF_API_TOKEN:
+        required: true
 
 jobs:
   terraform_plan:
