@@ -1,5 +1,4 @@
 name: "Terraform Plan Action"
-description: "Automate Terraform plan operations and provide feedback on pull requests."
 
 on:
   workflow_call:
