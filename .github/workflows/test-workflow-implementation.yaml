@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform-plan:
-    runs-on: ubuntu-latest
+    name: Dev Provisioning - Demo
     uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@339b174243abb3d87e6ffc304097a73eb18ed42d
     with:
       TF_CLOUD_ORGANIZATION: ${{ env.TF_CLOUD_ORGANIZATION }}
