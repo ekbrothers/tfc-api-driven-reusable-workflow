@@ -20,9 +20,9 @@ on:
         required: true
         type: string
         default: "./"
-    secrets:
-      TF_API_TOKEN:
-        required: true
+    # secrets:
+    #   TF_API_TOKEN:
+    #     required: true
 
 jobs:
   terraform_plan:
