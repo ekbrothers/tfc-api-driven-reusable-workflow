@@ -18,7 +18,7 @@ jobs:
     with:
       env: dev
       TF_CLOUD_ORGANIZATION: "testing-workspaces"
-      TF_API_TOKEN: "06VyGwznfwewVA.atlasv1.vEqEhDklpK9fkMrCKht5IZhehPY0ThtueSU5jTAken8LRSPmUzqP72lr4wZYwzJ8OYM"
+      TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
       TF_WORKSPACE: "tfc-api-driven-reusable-workflow"
       WORKING_DIRECTORY: "./"
     # secrets:

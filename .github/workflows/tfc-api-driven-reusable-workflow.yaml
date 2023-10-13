@@ -20,18 +20,29 @@ on:
         required: true
         type: string
         default: "./"
+
+    secrets:
       TF_API_TOKEN:
         required: true
-    # secrets:
-    #   TF_API_TOKEN:
-    #     required: true
 
 jobs:
   terraform_plan:
+    name: terraform plan
     runs-on: ubuntu-latest
+    env:
+      TF_CLOUD_ORGANIZATION: ${{ inputs.TF_CLOUD_ORGANIZATION }}
+      TF_WORKSPACE: ${{ inputs.TF_WORKSPACE }}
+      TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      # - name: TFLint
+      #   uses: hca-ccoe/actions-github-tflint@v1
+      #   with:
+      #     tf-path: ${{ inputs.tf-path }}
+      #     variables: ${{ inputs.variables }}
+      #     tf-version: ${{ inputs.tf-version }}
 
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
@@ -40,18 +51,16 @@ jobs:
           workspace: ${{ inputs.TF_WORKSPACE }}
           directory: ${{ inputs.WORKING_DIRECTORY }}
           speculative: true
-        # secrets:
-        #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Create Plan Run
-        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
-        with:
-          env: ${{ inputs.env }}
-          workspace: ${{ inputs.TF_WORKSPACE }}
-          configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
-          plan_only: true
-        # secrets:
-        #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      # - name: Create Plan Run
+      #   uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+      #   with:
+      #     env: ${{ inputs.env }}
+      #     workspace: ${{ inputs.TF_WORKSPACE }}
+      #     configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+      #     plan_only: true
+      # secrets:
+      #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
       # - name: Get Plan Output
       #   uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
