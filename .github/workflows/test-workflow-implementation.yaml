@@ -14,7 +14,7 @@ env:
 jobs:
   terraform-plan:
     name: Dev Provisioning - Demo
-    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@853bb452b51fed652aa933ea3405d6e59a2811d8
+    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@dc9ae048c5319a726b60c3b31187d38ec9cada73
     with:
       env: dev
     # secrets:
