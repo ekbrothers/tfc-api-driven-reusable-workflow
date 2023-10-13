@@ -13,4 +13,4 @@ jobs:
       TF_CLOUD_ORGANIZATION: testing-workspaces
       TF_API_TOKEN: zpOdKe46ux1XCw.atlasv1.kKdxY1e1WmtWdqzyv0zzszNcz0ZT2ZKPptEljz3rbgPFh18eLffYeTmw3pzYHB32kGA
       TF_WORKSPACE: tfc-api-driven-reusable-workflow
-      CONFIG_DIRECTORY: "./test_directory"
+      WORKING_DIRECTORY: "./test_directory"
