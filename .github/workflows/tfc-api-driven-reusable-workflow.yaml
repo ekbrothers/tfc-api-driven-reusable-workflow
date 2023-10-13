@@ -37,12 +37,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # - name: TFLint
-      #   uses: hca-ccoe/actions-github-tflint@v1
-      #   with:
-      #     tf-path: ${{ inputs.tf-path }}
-      #     variables: ${{ inputs.variables }}
-      #     tf-version: ${{ inputs.tf-version }}
+      - uses: pauloconnor/tflint-action@v0.0.2 
+        with:
+            tflint_changed_only: false
+            tflint_extra_options: --output json
+            tflint_enabled_rules:
+              terraform_required_providers
+              terraform_standard_module_structure
+            tflint_disabled_rules:
+              terraform_deprecated_interpolation
 
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
