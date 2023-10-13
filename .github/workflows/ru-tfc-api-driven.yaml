@@ -3,10 +3,30 @@ name: "Terraform Plan Action"
 on:
   workflow_call:
     inputs:
-      env:
+      ENV:
         required: true
         type: string
         description: GitHub environment required for deployment.
+      TF-PATH:
+        required: false
+        type: string
+        default: "./"
+        description: Path to your terraform content. Ensure the working directory is set within your terraform cloud workspace to match. Defaults to root.
+      # TF-PLAN:
+      #   required: false
+      #   type: boolean
+      #   default: false
+      #   description: Will run terraform plan. If set, an apply will not occur.      
+      # TF-APPLY:
+      #   required: false
+      #   type: boolean
+      #   default: false
+      #   description: Will run terraform plan. If set, an apply will not occur.
+      # TF-DESTROY:
+      #   required: false
+      #   type: boolean
+      #   default: false
+      #   description: When set, will perform a terraform destroy after an apply.
       TF_CLOUD_ORGANIZATION:
         description: "Terraform Cloud Organization Name"
         required: true
@@ -20,6 +40,10 @@ on:
         required: true
         type: string
         default: "./"
+      # VARIABLE-FILE:
+      #   type: string
+      #   required: false
+      #   default: ""
 
     secrets:
       TF_API_TOKEN:
@@ -55,21 +79,32 @@ jobs:
           directory: ${{ inputs.WORKING_DIRECTORY }}
           speculative: true
           token: ${{ secrets.TF_API_TOKEN }}
+          # variable-file: ${{ inputs.variable-file }}
           
-      # - name: Create Plan Run
-      #   uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
-      #   with:
-      #     env: ${{ inputs.env }}
-      #     workspace: ${{ inputs.TF_WORKSPACE }}
-      #     configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
-      #     plan_only: true
-      # secrets:
-      #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+      - name: Create Plan Run
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
+        with:
+          env: ${{ inputs.env }}
+          workspace: ${{ inputs.TF_WORKSPACE }}
+          configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+          plan_only: true
+          variables: ${{ inputs.variables }}
+          token: ${{ secrets.TF_API_TOKEN }}
 
-      # - name: Get Plan Output
-      #   uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
-      #   with:
-      #     plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+          # tf-plan: ${{ inputs.tf-plan }}
+          # tf-apply: ${{ inputs.tf-apply }}
+          # tf-destroy: ${{ inputs.tf-destroy }}
+
+      - name: Get Plan Output
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
+        with:
+          plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+
+      - name: Upload Plan Output as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: plan-output-artifact
+          path: ${{ steps.get-plan-output.outputs.plan_output_file_path }}
       # - name: Update PR
       #   uses: actions/github-script@v6
       #   with:
