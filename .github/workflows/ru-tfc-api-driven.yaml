@@ -73,6 +73,7 @@ jobs:
 
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: plan-upload
         with:
           env: ${{ inputs.env }}
           workspace: ${{ inputs.TF_WORKSPACE }}
