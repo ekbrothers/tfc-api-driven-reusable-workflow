@@ -10,6 +10,7 @@ jobs:
     name: Dev Provisioning - Demo
     uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@6a21de81f326411302a8dc5c7746e7115ae0fdd8
     with:
+      env: dev
       TF_CLOUD_ORGANIZATION: testing-workspaces
       TF_WORKSPACE: tfc-api-driven-reusable-workflow
       WORKING_DIRECTORY: "./test_directory"

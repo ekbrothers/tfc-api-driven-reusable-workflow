@@ -3,6 +3,10 @@ name: "Terraform Plan Action"
 on:
   workflow_call:
     inputs:
+      env:
+        required: true
+        type: string
+        description: GitHub environment required for deployment.
       TF_CLOUD_ORGANIZATION:
         description: "Terraform Cloud Organization Name"
         required: true
@@ -31,6 +35,7 @@ jobs:
       - name: Upload Configuration
         uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
         with:
+          env: ${{ inputs.env }}
           workspace: ${{ inputs.TF_WORKSPACE }}
           directory: ${{ inputs.WORKING_DIRECTORY }}
           speculative: true
@@ -40,6 +45,7 @@ jobs:
       - name: Create Plan Run
         uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.0
         with:
+          env: ${{ inputs.env }}
           workspace: ${{ inputs.TF_WORKSPACE }}
           configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
           plan_only: true
