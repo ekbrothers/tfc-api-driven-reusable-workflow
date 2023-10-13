@@ -8,7 +8,7 @@ on:
 jobs:
   terraform-plan:
     name: Dev Provisioning - Demo
-    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@3a184daa0071848c0e2db8935ba7591c33c01414
+    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@985111a10a4fdd86dc4721d894cc575c03285f6b
     with:
       TF_CLOUD_ORGANIZATION: testing-workspaces
       TF_API_TOKEN: zpOdKe46ux1XCw.atlasv1.kKdxY1e1WmtWdqzyv0zzszNcz0ZT2ZKPptEljz3rbgPFh18eLffYeTmw3pzYHB32kGA
