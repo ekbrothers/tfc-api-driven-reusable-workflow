@@ -79,6 +79,8 @@ jobs:
           token: ${{ secrets.TF_API_TOKEN }}
       - name: Update PR
         uses: actions/github-script@v6
+        id: plan-comment
+        if: github.event_name == 'pull_request' 
         with:
           script: |
             // 1. Retrieve existing bot comments for the PR

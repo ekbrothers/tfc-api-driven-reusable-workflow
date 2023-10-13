@@ -2,11 +2,14 @@ name: Terraform Plan on Push to Main
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   terraform-plan:
     name: Dev Provisioning - Demo
-    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/ru-tfc-api-driven.yaml@83f60bbc42dd56abf4240ba8bc02932cf917c92e
+    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/ru-tfc-api-driven.yaml@c17e2ab9486771f5ac156e84fc7ed657785acd80
     with:
       ENV: dev
       TF_CLOUD_ORGANIZATION: "testing-workspaces"
