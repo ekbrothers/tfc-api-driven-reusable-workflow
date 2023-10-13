@@ -5,11 +5,11 @@ on:
     branches:
       - main
 
-env:
-  TF_CLOUD_ORGANIZATION: "testing-workspaces"
-  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "tfc-api-driven-reusable-workflow"
-  WORKING_DIRECTORY: "./"
+# env:
+#   TF_CLOUD_ORGANIZATION: "testing-workspaces"
+#   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+#   TF_WORKSPACE: "tfc-api-driven-reusable-workflow"
+#   WORKING_DIRECTORY: "./"
 
 jobs:
   terraform-plan:
@@ -17,5 +17,9 @@ jobs:
     uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@dc9ae048c5319a726b60c3b31187d38ec9cada73
     with:
       env: dev
+      TF_CLOUD_ORGANIZATION: "testing-workspaces"
+      TF_API_TOKEN: "06VyGwznfwewVA.atlasv1.vEqEhDklpK9fkMrCKht5IZhehPY0ThtueSU5jTAken8LRSPmUzqP72lr4wZYwzJ8OYM"
+      TF_WORKSPACE: "tfc-api-driven-reusable-workflow"
+      WORKING_DIRECTORY: "./"
     # secrets:
     #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
