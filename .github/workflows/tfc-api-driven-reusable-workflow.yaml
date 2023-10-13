@@ -7,10 +7,6 @@ on:
         description: "Terraform Cloud Organization Name"
         required: true
         type: string
-      TF_API_TOKEN:
-        description: "Terraform API Token"
-        required: true
-        type: string
       TF_WORKSPACE:
         description: "Terraform Workspace"
         required: true
@@ -20,9 +16,9 @@ on:
         required: true
         type: string
         default: "./"
-    # secrets:
-    #   TF_API_TOKEN:
-    #     required: true
+    secrets:
+      TF_API_TOKEN:
+        required: true
 
 jobs:
   terraform_plan:
@@ -45,6 +41,8 @@ jobs:
           workspace: ${{ inputs.TF_WORKSPACE }}
           configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
           plan_only: true
+        secrets:
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
       # - name: Get Plan Output
       #   uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0

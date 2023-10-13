@@ -11,6 +11,6 @@ jobs:
     uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@985111a10a4fdd86dc4721d894cc575c03285f6b
     with:
       TF_CLOUD_ORGANIZATION: testing-workspaces
-      TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+      TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       TF_WORKSPACE: tfc-api-driven-reusable-workflow
       WORKING_DIRECTORY: "./test_directory"
