@@ -39,7 +39,7 @@ jobs:
     # strategy:
     #   matrix:
     #     tf-choice: ${{fromJSON(needs.set-matrix.outputs.decision_matrix)}}
-    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/ru-tfc-api-driven.yaml@63d3d0b4451791f541a2c61ba16bbbcb8cf88efa
+    uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/ru-tfc-api-driven.yaml@5321a130338632ba01453aa81005fab9371696c5
     with:
       ENV: dev
       # TF-PLAN: ${{matrix.tf-choice.plan}}
