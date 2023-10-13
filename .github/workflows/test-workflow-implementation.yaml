@@ -5,15 +5,17 @@ on:
     branches:
       - main
 
+  env:
+  TF_CLOUD_ORGANIZATION: "testing-workspaces"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+  TF_WORKSPACE: "tfc-api-driven-reusable-workflow"
+  WORKING_DIRECTORY: "./"
+
 jobs:
   terraform-plan:
     name: Dev Provisioning - Demo
     uses: ekbrothers/tfc-api-driven-reusable-workflow/.github/workflows/tfc-api-driven-reusable-workflow.yaml@02c3537028ad6b5b6afc6ae6b39fcd08b4d776e5
     with:
       env: dev
-      TF_CLOUD_ORGANIZATION: testing-workspaces
-      TF_WORKSPACE: tfc-api-driven-reusable-workflow
-      WORKING_DIRECTORY: "./test_directory"
-    secrets: inherit
     # secrets:
     #   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
