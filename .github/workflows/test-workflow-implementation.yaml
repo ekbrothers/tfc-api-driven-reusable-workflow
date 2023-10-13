@@ -15,9 +15,9 @@ on:
   #       - Destroy
 
 jobs:
-  set-matrix:
-    name: set variables
-    runs-on: ubuntu-latest
+  # set-matrix:
+  #   name: set variables
+  #   runs-on: ubuntu-latest
     # outputs:
     #   decision_matrix: ${{ steps.matrix-output.outputs.decision-matrix }}
     # steps:
