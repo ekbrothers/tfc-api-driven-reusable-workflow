@@ -1,9 +1,7 @@
 name: Terraform Plan on Push to Main
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   terraform-plan:
