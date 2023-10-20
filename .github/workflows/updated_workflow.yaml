@@ -1,0 +1,128 @@
+name: "Terraform Plan & Apply Action"
+
+on:
+  workflow_call:
+    inputs:
+      ENV:
+        required: true
+        type: string
+        description: GitHub environment required for deployment.
+      TF_PATH:
+        required: false
+        type: string
+        default: "./"
+        description: Path to your terraform content.
+      TF_CLOUD_ORGANIZATION:
+        description: "Terraform Cloud Organization Name"
+        required: true
+        type: string
+      TF_WORKSPACE:
+        description: "Terraform Workspace"
+        required: true
+        type: string
+      WORKING_DIRECTORY:
+        description: "Directory of Terraform Configurations"
+        required: true
+        type: string
+        default: "./"
+      TF_ACTION:
+        description: "Terraform Action (plan or apply)"
+        required: true
+        type: string
+
+    secrets:
+      TF_API_TOKEN:
+        required: true
+
+jobs:
+  terraform_action:
+    runs-on: ubuntu-latest
+    env:
+      TF_CLOUD_ORGANIZATION: ${{ inputs.TF_CLOUD_ORGANIZATION }}
+      TF_WORKSPACE: ${{ inputs.TF_WORKSPACE }}
+      TF_TOKEN_app_terraform_io: ${{ secrets.TF_API_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: pauloconnor/tflint-action@v0.0.2 
+        with:
+            tflint_changed_only: false
+            tflint_extra_options: --output json
+            tflint_enabled_rules:
+              terraform_required_providers
+              terraform_standard_module_structure
+            tflint_disabled_rules:
+              terraform_deprecated_interpolation
+
+      - name: Upload Configuration
+        uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+        id: plan-upload
+        with:
+          env: ${{ inputs.env }}
+          workspace: ${{ inputs.TF_WORKSPACE }}
+          directory: ${{ inputs.WORKING_DIRECTORY }}
+          speculative: true
+          token: ${{ secrets.TF_API_TOKEN }}
+      
+      - name: Create Plan Run
+        if: inputs.TF_ACTION == 'plan'
+        uses: hashicorp/tfc-workflows-github/actions/create-run@v1.0.4
+        id: plan-run
+        with:
+          workspace: ${{ inputs.TF_WORKSPACE }}
+          configuration_version: ${{ steps.plan-upload.outputs.configuration_version_id }}
+          plan_only: true
+          token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Get Plan Output
+        if: inputs.TF_ACTION == 'plan'
+        uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.0.0
+        id: plan-output
+        with:
+          plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+          token: ${{ secrets.TF_API_TOKEN }}
+      
+      - name: Update PR with Plan
+        if: inputs.TF_ACTION == 'plan' && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        id: plan-comment
+        with:
+          script: |
+            // 1. Retrieve existing bot comments for the PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
+            });
+            const output = `#### Terraform Cloud Plan Output
+                \`\`\`
+                Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+                \`\`\`
+                [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }})
+                `;
+            // 3. Delete previous comment so PR timeline makes sense
+            if (botComment) {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Apply Run
+        if: inputs.TF_ACTION == 'apply'
+        uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.0.4
+        id: apply
+        with:
+          run: ${{ steps.plan-run.outputs.run_id }}
+          comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"
